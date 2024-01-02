@@ -1,5 +1,4 @@
 import sys
-import re
 
 d = open(sys.argv[1]).read().strip()
 

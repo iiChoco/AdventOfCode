@@ -1,8 +1,11 @@
-d = open("3.in").read().strip()
-lines = d.split('\n')
-chars = []
-for line in lines:
-    for char in line:
+import sys
 
-print(chars)
+d = open(sys.argv[1]).read().strip()
 
+lines = ["." * 142]
+lines += d.split("\n")
+for i, line in enumerate(lines):
+    lines[i] = "." + lines[i] + "."
+lines.append("." * 142)
+
+print(lines)

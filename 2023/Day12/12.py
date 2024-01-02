@@ -4,30 +4,31 @@ d = open(sys.argv[1]).read().strip()
 
 L = d.split("\n")
 
+total = 0
 
-def f(spring, group):
-    if spring[0] == ".":
-        spring = spring[1]
-        return f(spring, group)
-    if spring[0] == "?":
-        spring = str(0) + spring[1:]
-        return f(spring, group)
-    if spring[0] == "#":
-        if all(spring[i] == "#" for i in range(int(group[0]))):
-            spring = spring[: range(int(group[0]))]
+
+def springs(spring, group):
+    if not spring:
+        return 1 if not group else 0
+    elif spring[0] == ".":
+        return springs(spring[1:], group)
+    elif spring[0] == "?":
+        return int(springs("#" + spring[1:], group)) + int(
+            springs("." + spring[1:], group)
+        )
+    elif spring[0] == "#" and group:
+        if len(spring) >= int(group[0]) and all(
+            spring[x] != "." for x in range(int(group[0]))
+        ):
+            spring = spring[int(group[0]) :]
             group.pop(0)
-            return f(spring, group)
-    if spring == "" and not group:
-        return 1
-    elif spring == "" and group:
-        return 0
+            return springs(spring, group)
     return 0
 
 
-count = 0
 for line in L:
-    a, b = line.split()
-    print(a, b)
-    b = b.split(",")
-    count += int(f(a, b))
-print(count)
+    spring, group = line.split()
+    group = group.split(",")
+    temp = int(springs(spring, group))
+    total += temp
+print(total)
